@@ -53,9 +53,6 @@ export function getTemplate(
   >
     ${slotsTemplate}${slot || ""}
 </${unsafeStatic(component!.tagName!)}>
-<script>
-  component = document.querySelector('${component!.tagName!}');
-</script>
 `;
 }
 
