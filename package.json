@@ -9,7 +9,7 @@
     "index.js",
     "index.d.ts",
     "types.d.ts",
-    "/dist"
+    "/src"
   ],
   "scripts": {
     "build": "tsc && cp src/storybook.d.ts dist/storybook.d.ts || copy src/storybook.d.ts dist/storybook.d.ts",
