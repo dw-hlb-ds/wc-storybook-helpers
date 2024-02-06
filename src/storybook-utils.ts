@@ -25,7 +25,7 @@ export function setWcStorybookHelpersConfig(options: Options) {
  * @param tagName the tag name referenced in the Custom Elements Manifest
  * @returns An object containing the argTypes, reactArgTypes, events, styleTemplate, and template
  */
-export function getWcStorybookHelpers(tagName: string) {
+export function getWcStorybookHelpers(tagName: string, manifest) {
   /**
    *
    * uses the global window.__STORYBOOK_CUSTOM_ELEMENTS_MANIFEST__
@@ -33,7 +33,7 @@ export function getWcStorybookHelpers(tagName: string) {
    * method in the `preview.cjs` file
    *
    */
-  const cem = (window as any).__STORYBOOK_CUSTOM_ELEMENTS_MANIFEST__;
+  const cem = (window as any).__STORYBOOK_CUSTOM_ELEMENTS_MANIFEST__ || manifest;
   if (!cem) {
     throw new Error(
       "Custom Elements Manifest not found. Be sure to follow the pre-install steps in this guide:\nhttps://www.npmjs.com/package/wc-storybook-helpers#before-you-install"
