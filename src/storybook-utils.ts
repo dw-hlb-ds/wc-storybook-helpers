@@ -1,5 +1,6 @@
 import { TemplateResult } from "lit";
-import type { ArgTypes, Options } from "./storybook";
+import type {ArgTypes as ArgTypesStorybook } from "./storybook";
+import type {ArgTypes, Args, Options} from "@storybook/types";
 import { getStyleTemplate, getTemplate } from "./html-templates.js";
 import {
   getComponentByTagName,
@@ -25,7 +26,7 @@ export function setWcStorybookHelpersConfig(options: Options) {
  * @param tagName the tag name referenced in the Custom Elements Manifest
  * @returns An object containing the argTypes, reactArgTypes, events, styleTemplate, and template
  */
-export function getWcStorybookHelpers(tagName: string, manifest) {
+export function getWcStorybookHelpers(tagName: string, manifest: Record<string, any>) {
   /**
    *
    * uses the global window.__STORYBOOK_CUSTOM_ELEMENTS_MANIFEST__
@@ -44,12 +45,12 @@ export function getWcStorybookHelpers(tagName: string, manifest) {
   const eventNames = component?.events?.map((event) => event.name) || [];
 
   return {
-    args: getArgs(component),
-    argTypes: getArgTypes(component),
+    args: getArgs(component) as Args,
+    argTypes: getArgTypes(component) as ArgTypes,
     reactArgTypes: getReactProps(component),
     events: eventNames,
-    styleTemplate: (args?: any) => getStyleTemplate(component, args),
-    template: (args?: any, slot?: TemplateResult) =>
+    styleTemplate: (args?: Args) => getStyleTemplate(component, args),
+    template: (args?: Args, slot?: TemplateResult) =>
       getTemplate(component, args, slot),
   };
 }
@@ -59,9 +60,9 @@ export function getWcStorybookHelpers(tagName: string, manifest) {
  * @param component component object from the Custom Elements Manifest
  * @returns an object containing the `argTypes` for the component
  */
-function getArgTypes(component?: Declaration): ArgTypes {
+function getArgTypes(component?: Declaration): ArgTypesStorybook {
   // Attributes and properties must go last to prevent namespaced attributes from being overwritten
-  const argTypes: ArgTypes = {
+  const argTypes: ArgTypesStorybook = {
     ...getCssProperties(component),
     ...getCssParts(component),
     ...getSlots(component),
@@ -109,8 +110,8 @@ function getDefaultValue(value?: string | number | boolean | object) {
  * @param component component object from the Custom Elements Manifest
  * @returns an object containing the `argTypes` for a React component
  */
-function getReactProps(component?: Declaration): ArgTypes {
-  const argTypes: ArgTypes = {
+function getReactProps(component?: Declaration): ArgTypesStorybook {
+  const argTypes: ArgTypesStorybook = {
     ...getReactProperties(component),
     ...getReactEvents(component),
     ...getCssProperties(component),
