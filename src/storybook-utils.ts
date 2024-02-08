@@ -1,5 +1,6 @@
 import { TemplateResult } from "lit";
-import type { ArgTypes, Options } from "./storybook";
+import type { Options } from "./storybook";
+import type { Args, ArgTypes } from "@storybook/types";
 import { getStyleTemplate, getTemplate } from "./html-templates.js";
 import {
   getComponentByTagName,
@@ -25,7 +26,14 @@ export function setWcStorybookHelpersConfig(options: Options) {
  * @param tagName the tag name referenced in the Custom Elements Manifest
  * @returns An object containing the argTypes, reactArgTypes, events, styleTemplate, and template
  */
-export function getWcStorybookHelpers(tagName: string, manifest) {
+export function getWcStorybookHelpers(tagName: string, manifest: Record<string, any>) : {
+  args: Args;
+  argTypes: ArgTypes;
+  reactArgTypes: ArgTypes;
+  events: string[];
+  styleTemplate: (args?: Args) => TemplateResult;
+  template: (args?: Args, slot?: TemplateResult | undefined) => TemplateResult;
+}{
   /**
    *
    * uses the global window.__STORYBOOK_CUSTOM_ELEMENTS_MANIFEST__
@@ -44,12 +52,12 @@ export function getWcStorybookHelpers(tagName: string, manifest) {
   const eventNames = component?.events?.map((event) => event.name) || [];
 
   return {
-    args: getArgs(component),
-    argTypes: getArgTypes(component),
+    args: getArgs(component) as Args,
+    argTypes: getArgTypes(component) as ArgTypes,
     reactArgTypes: getReactProps(component),
     events: eventNames,
-    styleTemplate: (args?: any) => getStyleTemplate(component, args),
-    template: (args?: any, slot?: TemplateResult) =>
+    styleTemplate: (args?: Args) => getStyleTemplate(component, args),
+    template: (args?: Args, slot?: TemplateResult | undefined) =>
       getTemplate(component, args, slot),
   };
 }
@@ -61,14 +69,14 @@ export function getWcStorybookHelpers(tagName: string, manifest) {
  */
 function getArgTypes(component?: Declaration): ArgTypes {
   // Attributes and properties must go last to prevent namespaced attributes from being overwritten
-  const argTypes: ArgTypes = {
+  const argTypes: ArgTypesStorybook = {
     ...getCssProperties(component),
     ...getCssParts(component),
     ...getSlots(component),
     ...getAttributesAndProperties(component),
   };
 
-  return argTypes;
+  return argTypes as ArgTypes;
 }
 
 /**
@@ -76,14 +84,14 @@ function getArgTypes(component?: Declaration): ArgTypes {
  * @param component component object from the Custom Elements Manifest
  * @returns an object containing the `args` for the component
  */
-function getArgs(component?: Declaration): Record<string, any> {
+function getArgs(component?: Declaration): Args {
   const args = Object.entries(getArgTypes(component))
     // We only want to get args that have a control in Storybook
     .filter(([, value]) => value?.control)
     .map(([key, value]) => {
       const defaultValue = getDefaultValue(value.defaultValue);
       return {
-        [key]: defaultValue === undefined ? '' : defaultValue,
+        [key]: defaultValue === undefined ? "" : defaultValue,
       };
     })
     .reduce((acc, value) => ({ ...acc, ...value }), {});

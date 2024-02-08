@@ -9,6 +9,7 @@ import {
   getCssProperties,
   getSlots,
 } from "./cem-utilities.js";
+import { Args } from "@storybook/types";
 
 let argObserver: MutationObserver | undefined;
 let lastTagName: string | undefined;
@@ -22,7 +23,7 @@ let lastTagName: string | undefined;
  */
 export function getTemplate(
   component?: Declaration,
-  args?: any,
+  args?: Args,
   slot?: TemplateResult
 ): TemplateResult {
   if (!args) {
@@ -62,14 +63,14 @@ export function getTemplate(
  * @param args args object from Storybook story
  * @returns styles in a tagged template literal
  */
-export function getStyleTemplate(component?: Declaration, args?: any) {
+export function getStyleTemplate(component?: Declaration, args?: any): TemplateResult {
   const cssPartsTemplate = getCssPartsTemplate(component!, args) || '';
 
   return `${cssPartsTemplate}`?.replaceAll(/\s+/g, "") != ""
     ? html`<style>
         ${unsafeStatic(cssPartsTemplate)}
       </style> `
-    : "";
+    : html``;
 }
 
 /**

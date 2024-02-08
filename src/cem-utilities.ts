@@ -1,5 +1,6 @@
 import { CustomElementsManifest, Declaration } from "./cem-schema";
-import type { ArgTypes, ControlOptions, Options } from "./storybook";
+import type { ControlOptions, Options } from "./storybook";
+import type { ArgTypes } from '@storybook/types';
 
 let options: Options = {};
 
