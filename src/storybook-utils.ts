@@ -26,7 +26,14 @@ export function setWcStorybookHelpersConfig(options: Options) {
  * @param tagName the tag name referenced in the Custom Elements Manifest
  * @returns An object containing the argTypes, reactArgTypes, events, styleTemplate, and template
  */
-export function getWcStorybookHelpers(tagName: string, manifest: Record<string, any>) {
+export function getWcStorybookHelpers(tagName: string, manifest: Record<string, any>): {
+  args: Args;
+  argTypes: ArgTypes<Args>;
+  reactArgTypes: ArgTypesStorybook;
+  events: string[];
+  styleTemplate: (args?: Args) => TemplateResult | "";
+  template: (args?: Args, slot?: TemplateResult) => TemplateResult;
+}{
   /**
    *
    * uses the global window.__STORYBOOK_CUSTOM_ELEMENTS_MANIFEST__
@@ -60,7 +67,7 @@ export function getWcStorybookHelpers(tagName: string, manifest: Record<string, 
  * @param component component object from the Custom Elements Manifest
  * @returns an object containing the `argTypes` for the component
  */
-function getArgTypes(component?: Declaration): ArgTypesStorybook {
+function getArgTypes(component?: Declaration): ArgTypes {
   // Attributes and properties must go last to prevent namespaced attributes from being overwritten
   const argTypes: ArgTypesStorybook = {
     ...getCssProperties(component),
@@ -69,7 +76,7 @@ function getArgTypes(component?: Declaration): ArgTypesStorybook {
     ...getAttributesAndProperties(component),
   };
 
-  return argTypes;
+  return argTypes as ArgTypes;
 }
 
 /**
