@@ -26,7 +26,7 @@ export function setWcStorybookHelpersConfig(options: Options) {
  * @param tagName the tag name referenced in the Custom Elements Manifest
  * @returns An object containing the argTypes, reactArgTypes, events, styleTemplate, and template
  */
-export function getWcStorybookHelpers(tagName: string, manifest: Record<string, any>) : {
+export function getWcStorybookHelpers(tagName: string, manifest: Record<string, unknown>) : {
   args: Args;
   argTypes: ArgTypes;
   reactArgTypes: ArgTypes;
