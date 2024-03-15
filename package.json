@@ -38,7 +38,7 @@
   ],
   "dependencies": {
     "@open-wc/lit-helpers": "^0.5.1",
-    "@storybook/client-api": "^6.5.16",
+    "@storybook/client-api": "^7.6.13",
     "lit": "^2.6.1"
   },
   "devDependencies": {
